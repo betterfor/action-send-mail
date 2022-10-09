@@ -17,6 +17,9 @@ func init() {
 }
 
 func main() {
+	viper.ReadInConfig()
+
+	fmt.Println(viper.AllKeys())
 	mailHost := viper.GetString("server_address")
 	mailPort := viper.GetInt("server_port")
 	secure := viper.GetBool("secure")
