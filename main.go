@@ -13,7 +13,7 @@ import (
 
 func init() {
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("input_")
+	viper.SetEnvPrefix("INPUT_")
 }
 
 func main() {
