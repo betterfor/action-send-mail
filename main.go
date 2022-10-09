@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"gopkg.in/gomail.v2"
 	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 )
@@ -17,7 +18,9 @@ func init() {
 }
 
 func main() {
-	viper.ReadInConfig()
+	//viper.ReadInConfig()
+
+	fmt.Println(os.Environ())
 
 	fmt.Println(viper.AllKeys())
 	mailHost := viper.GetString("server_address")
