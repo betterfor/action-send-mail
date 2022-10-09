@@ -1,10 +1,60 @@
-name: 'Container Action Template'
-description: 'Get started with Container actions'
-author: 'GitHub'
+name: 'Send Email'
+description: 'Send email with Container actions'
+branding:
+  icon: 'mail'
+  color: 'yellow'
+author: 'betterfor'
 inputs: 
-  myInput:
-    description: 'Input to use'
-    default: 'world'
+  server_address:
+    description: SMTP server address
+  server_port:
+    description: SMTP server port
+    default: "25"
+  secure:
+    description: Whether this connection use TLS (default is true if server_port is 465)
+  username:
+    description: Authenticate as this user to SMTP server
+  password:
+    description: Authenticate with this password to SMTP server
+  subject:
+    description: Subject of mail message
+    required: true
+  to:
+    description: Recipients mail addresses (separated with comma)
+    required: true
+  from: 
+    description: Full name of mail sender (might be with an email address specified in <>)
+    required: true
+  body:
+    description: Body of mail message (might be a filename prefixed with file:// to read from)
+    required: false
+  html_body:
+    description: HTML of mail message (might be a filename prefixed with file:// to read from)
+    required: false
+  cc:
+    description: Carbon copy recipients (separated with comma)
+    required: false
+  bcc:
+    description: Blind carbon copy recipients (separated with comma)
+    required: false
+  reply_to:
+    description: An email address that will appear on the Reply-To field
+    required: false
+  in_reply_to:
+    description: The Message-ID this message is replying to
+    required: false
+  ignore_cert:
+    description: Allow unsigned/invalid certificates
+    required: false
+  convert_markdown:
+    description: Convert body from Markdown to HTML (set content_type input as text/html too)
+    required: false
+  attachments:
+    description: Files that will be added to mail message attachments (separated with comma)
+    required: false
+  priority:
+    description: Set Priority level for the mail message to 'high', 'normal' (default) or 'low'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
