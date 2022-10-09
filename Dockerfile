@@ -1,7 +1,5 @@
-FROM alpine:3.10
+FROM golang:1.17.9
 
-COPY LICENSE README.md /
+COPY . .
 
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["go","run","main.go"]
