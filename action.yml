@@ -10,8 +10,6 @@ inputs:
   server_port:
     description: SMTP server port
     default: "25"
-  secure:
-    description: Whether this connection use TLS (default is true if server_port is 465)
   username:
     description: Authenticate as this user to SMTP server
   password:
@@ -42,9 +40,6 @@ inputs:
     required: false
   in_reply_to:
     description: The Message-ID this message is replying to
-    required: false
-  ignore_cert:
-    description: Allow unsigned/invalid certificates
     required: false
   convert_markdown:
     description: Convert body from Markdown to HTML (set content_type input as text/html too)

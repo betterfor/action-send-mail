@@ -18,7 +18,6 @@ import (
 func main() {
 	mailHost := os.Getenv("INPUT_SERVER_ADDRESS")
 	mailPort := convertInt(os.Getenv("INPUT_SERVER_PORT"))
-	secure := convertBool(os.Getenv("INPUT_SECURE"))
 	username := os.Getenv("INPUT_USERNAME")
 	password := os.Getenv("INPUT_PASSWORD")
 	subject := os.Getenv("INPUT_SUBJECT")
@@ -30,7 +29,6 @@ func main() {
 	bcc := os.Getenv("INPUT_BCC")
 	replyTo := os.Getenv("INPUT_REPLY_TO")
 	inReplyTo := os.Getenv("INPUT_IN_REPLY_TO")
-	//ignoreCert := viper.GetBool("ignore_cert")
 	convertMarkdown := convertBool(os.Getenv("INPUT_CONVERT_MARKDOWN"))
 	attachments := os.Getenv("INPUT_ATTACHMENTS")
 	priority := os.Getenv("INPUT_PRIORITY")
@@ -61,10 +59,6 @@ func main() {
 		}
 	}
 
-	if !secure {
-		secure = mailPort == 465
-	}
-
 	if body != "" {
 		m.SetBody("text/plain", getBody(body, false))
 	}
@@ -72,8 +66,12 @@ func main() {
 		m.SetBody("text/html", getBody(htmlBody, convertMarkdown))
 	}
 
+	if mailPort == 0 {
+		mailPort = 25
+	}
+
 	dialer := gomail.NewDialer(mailHost, mailPort, username, password)
-	if secure {
+	if dialer.SSL {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
