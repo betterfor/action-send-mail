@@ -15,6 +15,13 @@ import (
 )
 
 func main() {
+	envs := os.Environ()
+	for _, e := range envs {
+		if strings.HasPrefix(e, "INPUT_") {
+			fmt.Println(e, "=", os.Getenv(e))
+		}
+	}
+
 	mailHost := os.Getenv("INPUT_SERVER_ADDRESS")
 	mailPort := convertInt(os.Getenv("INPUT_SERVER_PORT"))
 	secure := convertBool(os.Getenv("INPUT_SECURE"))
