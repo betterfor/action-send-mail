@@ -1,8 +1,12 @@
+[![Build Status](https://github.com/betterfor/action-send-mail/workflows/Test%20action/badge.svg)](https://github.com/betterfor/action-send-mail/commits/main)
+
 [English](https://github.com/betterfor/action-send-mail/blob/main/README.md) | 简体中文
 
 # 发送邮件 Github Action
 
-本 action 可以发送多个收件人。
+> 参考 [action-send-mail](https://github.com/dawidd6/action-send-mail) 
+
+通过 action 可以发送多个收件人。
 
 一些特性：
 - 文本内容

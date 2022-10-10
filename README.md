@@ -1,6 +1,10 @@
+[![Build Status](https://github.com/betterfor/action-send-mail/workflows/Test%20action/badge.svg)](https://github.com/betterfor/action-send-mail/commits/main)
+
 English | [简体中文](https://github.com/betterfor/action-send-mail/blob/main/README_ZH.md)
 
 # Send Mail Github Action
+
+> Reference [action-send-mail](https://github.com/dawidd6/action-send-mail) 
 
 An action that simply sends a mail to multiple recipients.
 
