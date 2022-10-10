@@ -1,0 +1,9 @@
+# github.com/russross/blackfriday v1.6.0
+## explicit; go 1.13
+github.com/russross/blackfriday
+# gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc
+## explicit
+gopkg.in/alexcesaro/quotedprintable.v3
+# gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+## explicit
+gopkg.in/gomail.v2
