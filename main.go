@@ -3,44 +3,35 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/russross/blackfriday"
-	"github.com/spf13/viper"
-	"gopkg.in/gomail.v2"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/russross/blackfriday"
+	"gopkg.in/gomail.v2"
 )
 
-func init() {
-	viper.AutomaticEnv()
-	viper.SetEnvPrefix("INPUT_")
-}
-
 func main() {
-	//viper.ReadInConfig()
-
-	fmt.Println(os.Environ())
-
-	fmt.Println(viper.AllKeys())
-	mailHost := viper.GetString("server_address")
-	mailPort := viper.GetInt("server_port")
-	secure := viper.GetBool("secure")
-	username := viper.GetString("username")
-	password := viper.GetString("password")
-	subject := viper.GetString("subject")
-	to := strings.Split(viper.GetString("to"), ",")
-	from := viper.GetString("from")
-	body := viper.GetString("body")
-	htmlBody := viper.GetString("html_body")
-	cc := strings.Split(viper.GetString("cc"), ",")
-	bcc := strings.Split(viper.GetString("bcc"), ",")
-	replyTo := viper.GetString("reply_to")
-	inReplyTo := viper.GetString("in_reply_to")
+	mailHost := os.Getenv("INPUT_SERVER_ADDRESS")
+	mailPort := convertInt(os.Getenv("INPUT_SERVER_PORT"))
+	secure := convertBool(os.Getenv("INPUT_SECURE"))
+	username := os.Getenv("INPUT_USERNAME")
+	password := os.Getenv("INPUT_PASSWORD")
+	subject := os.Getenv("INPUT_SUBJECT")
+	to := strings.Split(os.Getenv("INPUT_TO"), ",")
+	from := os.Getenv("INPUT_FROM")
+	body := os.Getenv("INPUT_BODY")
+	htmlBody := os.Getenv("INPUT_HTML_BODY")
+	cc := strings.Split(os.Getenv("INPUT_CC"), ",")
+	bcc := strings.Split(os.Getenv("INPUT_BCC"), ",")
+	replyTo := os.Getenv("INPUT_REPLY_TO")
+	inReplyTo := os.Getenv("INPUT_IN_REPLY_TO")
 	//ignoreCert := viper.GetBool("ignore_cert")
-	convertMarkdown := viper.GetBool("convert_markdown")
-	attachments := strings.Split(viper.GetString("attachments"), ",")
-	priority := viper.GetString("priority")
+	convertMarkdown := convertBool(os.Getenv("INPUT_CONVERT_MARKDOWN"))
+	attachments := strings.Split(os.Getenv("INPUT_ATTACHMENTS"), ",")
+	priority := os.Getenv("INPUT_PRIORITY")
 
 	m := gomail.NewMessage()
 	m.SetHeader("Subject", subject)
@@ -95,4 +86,14 @@ func getBody(bodyOrFile string, convertMarkdown bool) string {
 	}
 
 	return body
+}
+
+func convertBool(b string) bool { 
+	b = strings.ToLower(b)
+    return b == "true" || b == "yes" || b == "1"
+}
+
+func convertInt(i string) int {
+	ints,_ := strconv.Atoi(i)
+	return ints
 }
