@@ -43,13 +43,17 @@ func main() {
 
 	m := gomail.NewMessage()
 	m.SetHeader("Subject", subject)
-	m.SetHeader("From", getFrom(from, username))
+	m.SetHeader("From", m.FormatAddress(username, from))
 	m.SetHeader("To", to...)
 	m.SetHeader("Cc", cc...)
 	m.SetHeader("Bcc", bcc...)
 	m.SetHeader("Reply-To", replyTo)
 	m.SetHeader("In-Reply-To", inReplyTo)
 	m.SetHeader("X-Priority", priority)
+
+	fmt.Println("Subject: ", subject)
+	fmt.Println("From: ", m.FormatAddress(username, from))
+	fmt.Println("To: ", to)
 
 	for _, a := range attachments {
 		m.Attach(a)
@@ -70,6 +74,8 @@ func main() {
 	if secure {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
+
+	fmt.Println()
 
 	err := dialer.DialAndSend(m)
 	if err != nil {
