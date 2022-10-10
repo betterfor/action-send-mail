@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -35,7 +36,7 @@ func main() {
 
 	m := gomail.NewMessage()
 	m.SetHeader("Subject", subject)
-	m.SetHeader("From", from)
+	m.SetHeader("From", getFrom(from, username))
 	m.SetHeader("To", to...)
 	m.SetHeader("Cc", cc...)
 	m.SetHeader("Bcc", bcc...)
@@ -88,12 +89,20 @@ func getBody(bodyOrFile string, convertMarkdown bool) string {
 	return body
 }
 
-func convertBool(b string) bool { 
+func convertBool(b string) bool {
 	b = strings.ToLower(b)
-    return b == "true" || b == "yes" || b == "1"
+	return b == "true" || b == "yes" || b == "1"
 }
 
 func convertInt(i string) int {
-	ints,_ := strconv.Atoi(i)
+	ints, _ := strconv.Atoi(i)
 	return ints
+}
+
+func getFrom(from, username string) string {
+	ok, _ := regexp.MatchString(`.+ <.+@.+>`, from)
+	if ok {
+		return from
+	}
+	return fmt.Sprintf("%s <%s>", from, username)
 }
