@@ -60,7 +60,7 @@ jobs:
           server_port: ${{secrets.ADDRESS_PORT}}
           username: ${{secrets.USERNAME}}
           password: ${{secrets.PASSWORD}}
-          subject: ${{matrix.body}}
+          subject: ${{matrix.subject}}
           body: ${{matrix.body}}
           html_body: ${{matrix.html_body}}
           to: ${{github.event.pusher.email}}

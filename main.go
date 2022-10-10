@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"regexp"
 	"strconv"
@@ -15,48 +16,49 @@ import (
 )
 
 func main() {
-	envs := os.Environ()
-	for _, e := range envs {
-		if strings.HasPrefix(e, "INPUT_") {
-			fmt.Println(e, "=", os.Getenv(e))
-		}
-	}
-
 	mailHost := os.Getenv("INPUT_SERVER_ADDRESS")
 	mailPort := convertInt(os.Getenv("INPUT_SERVER_PORT"))
 	secure := convertBool(os.Getenv("INPUT_SECURE"))
 	username := os.Getenv("INPUT_USERNAME")
 	password := os.Getenv("INPUT_PASSWORD")
 	subject := os.Getenv("INPUT_SUBJECT")
-	to := strings.Split(os.Getenv("INPUT_TO"), ",")
+	to := os.Getenv("INPUT_TO")
 	from := os.Getenv("INPUT_FROM")
 	body := os.Getenv("INPUT_BODY")
 	htmlBody := os.Getenv("INPUT_HTML_BODY")
-	cc := strings.Split(os.Getenv("INPUT_CC"), ",")
-	bcc := strings.Split(os.Getenv("INPUT_BCC"), ",")
+	cc := os.Getenv("INPUT_CC")
+	bcc := os.Getenv("INPUT_BCC")
 	replyTo := os.Getenv("INPUT_REPLY_TO")
 	inReplyTo := os.Getenv("INPUT_IN_REPLY_TO")
 	//ignoreCert := viper.GetBool("ignore_cert")
 	convertMarkdown := convertBool(os.Getenv("INPUT_CONVERT_MARKDOWN"))
-	attachments := strings.Split(os.Getenv("INPUT_ATTACHMENTS"), ",")
+	attachments := os.Getenv("INPUT_ATTACHMENTS")
 	priority := os.Getenv("INPUT_PRIORITY")
 
 	m := gomail.NewMessage()
 	m.SetHeader("Subject", subject)
 	m.SetHeader("From", m.FormatAddress(username, from))
-	m.SetHeader("To", to...)
-	m.SetHeader("Cc", cc...)
-	m.SetHeader("Bcc", bcc...)
-	m.SetHeader("Reply-To", replyTo)
-	m.SetHeader("In-Reply-To", inReplyTo)
-	m.SetHeader("X-Priority", priority)
+	m.SetHeader("To", strings.Split(to, ",")...)
+	if len(cc) != 0 {
+		m.SetHeader("Cc", strings.Split(cc, ",")...)
+	}
+	if len(bcc) != 0 {
+		m.SetHeader("Bcc", strings.Split(bcc, ",")...)
+	}
+	if len(replyTo) != 0 {
+		m.SetHeader("Reply-To", replyTo)
+	}
+	if len(inReplyTo) != 0 {
+		m.SetHeader("In-Reply-To", inReplyTo)
+	}
+	if len(priority) != 0 {
+		m.SetHeader("X-Priority", priority)
+	}
 
-	fmt.Println("Subject: ", subject)
-	fmt.Println("From: ", m.FormatAddress(username, from))
-	fmt.Println("To: ", to)
-
-	for _, a := range attachments {
-		m.Attach(a)
+	if len(attachments) != 0 {
+		for _, a := range strings.Split(attachments, ",") {
+			m.Attach(a)
+		}
 	}
 
 	if !secure {
@@ -75,11 +77,9 @@ func main() {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
-	fmt.Println()
-
 	err := dialer.DialAndSend(m)
 	if err != nil {
-		fmt.Println(time.Now(), "send mail error: ", err)
+		log.Fatal(time.Now(), "send mail error: ", err)
 	}
 }
 
@@ -89,8 +89,7 @@ func getBody(bodyOrFile string, convertMarkdown bool) string {
 		file := strings.TrimPrefix(bodyOrFile, "file://")
 		bodyBts, err := ioutil.ReadFile(file)
 		if err != nil {
-			fmt.Println("attach file error: ", err)
-			return err.Error()
+			log.Fatal(err)
 		}
 		body = string(bodyBts)
 	}
