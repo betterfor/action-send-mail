@@ -6,4 +6,6 @@ ENV GO111MODULE=on
 
 COPY . .
 
+RUN ls -l
+
 ENTRYPOINT ["go","run","main.go"]
