@@ -55,6 +55,7 @@ func main() {
 
 	if len(attachments) != 0 {
 		for _, a := range strings.Split(attachments, ",") {
+			fmt.Println("attach file: ", a)
 			m.Attach(a)
 		}
 	}
@@ -79,6 +80,7 @@ func main() {
 	if err != nil {
 		log.Fatal(time.Now(), "send mail error: ", err)
 	}
+	fmt.Println("Send Success")
 }
 
 func getBody(bodyOrFile string, convertMarkdown bool) string {
