@@ -1,4 +1,4 @@
-name: 'send-email'
+name: 'send-mail'
 description: 'Send email with Container actions'
 branding:
   icon: 'mail'
