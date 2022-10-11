@@ -6,6 +6,6 @@ ENV GO111MODULE=on
 
 COPY . .
 
-RUN ls -l
+RUN go build -o mail main.go
 
-ENTRYPOINT ["go","run","main.go"]
+ENTRYPOINT ["/build_dir/mail"]
